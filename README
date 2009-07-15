@@ -1,0 +1,77 @@
+NAME
+    Test::EOL - Check the correct line endings in your project
+
+SYNOPSIS
+    "Test::EOL" lets you check the presence of tabs in your perl code. It
+    report its results in standard "Test::Simple" fashion:
+
+      use Test::EOL tests => 1;
+      eol_unix_ok( 'lib/Module.pm', 'Module is tab free');
+
+    Module authors can include the following in a t/eol.t and have
+    "Test::EOL" automatically find and check all perl files in a module
+    distribution:
+
+      use Test::EOL;
+      all_perl_files_ok();
+
+    or
+
+      use Test::EOL;
+      all_perl_files_ok( @mydirs );
+
+DESCRIPTION
+    This module scans your project/distribution for any perl files (scripts,
+    modules, etc) for the presence of tabs.
+
+EXPORT
+    A list of functions that can be exported. You can delete this section if
+    you don't export anything, such as for a purely object-oriented module.
+
+FUNCTIONS
+  all_perl_files_ok( [ @directories ] )
+    Applies "eol_unix_ok()" to all perl files found in @directories (and sub
+    directories). If no <@directories> is given, the starting point is one
+    level above the current running script, that should cover all the files
+    of a typical CPAN distribution. A perl file is *.pl or *.pm or *.t or a
+    file starting with "#!...perl"
+
+    If the test plan is defined:
+
+      use Test::EOL tests => 3;
+      all_perl_files_ok();
+
+    the total number of files tested must be specified.
+
+  eol_unix_ok( $file [, $text] )
+    Run a unix EOL check on $file. For a module, the path (lib/My/Module.pm)
+    or the name (My::Module) can be both used.
+
+AUTHOR
+    Tomas Doran (t0m) "<bobtfish@bobtfish.net>"
+
+BUGS
+    Testing for EOL styles other than unix (\n) currently unsupported.
+
+    The source code can be found on github, as listed in " META.yml ",
+    patches are welcome.
+
+    Otherwise please report any bugs or feature requests to "bug-test-eol at
+    rt.cpan.org", or through the web interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-EOL>. I will be
+    notified, and then you'll automatically be notified of progress on your
+    bug as I make changes.
+
+ACKNOWLEDGEMENTS
+    Shamelessly ripped off from Test::NoTabs.
+
+SEE ALSO
+    Test::More, Test::Pod. Test::Distribution, <Test:NoWarnings>,
+    Test::NoTabs, Module::Install::AuthorTests.
+
+COPYRIGHT & LICENSE
+    Copyright 2009 Tomas Doran, some rights reserved.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
