@@ -15,11 +15,10 @@ $inc = "-I $inc" if $inc;
     local $/ = undef;
     open my $fh, '<', $outfile or die $!;
     my $content = <$fh>;
-    like( $content, qr/^not ok 1 - No tabs in '[^']*' on line 4/m, 'windows EOL found in tmp file 1' );
-    #unlink $outfile;
-    #system("rm -rf $dir");
+    like( $content, qr/^not ok 1 - No windows line endings in '[^']*' on line 4/m, 'windows EOL found in tmp file 1' );
+    unlink $outfile;
+    system("rm -rf $dir");
 }
-
 {
     my $dir = make_bad_file_2();
     my (undef, $outfile) = tempfile();
@@ -27,11 +26,10 @@ $inc = "-I $inc" if $inc;
     open my $fh, '<', $outfile or die $!;
     local $/ = undef;
     my $content = <$fh>;
-    like( $content, qr/^not ok 1 - No tabs in '[^']*' on line 12/m, 'windows EOL found in tmp file2 ' );
+    like( $content, qr/^not ok 1 - No windows line endings in '[^']*' on line \d+/m, 'windows EOL found in tmp file2 ' );
     unlink $outfile;
     system("rm -rf $dir");
 }
-
 {
     my ($dir, $file) = make_bad_file_3();
     my (undef, $outfile) = tempfile();
@@ -39,7 +37,7 @@ $inc = "-I $inc" if $inc;
     open my $fh, '<', $outfile or die $!;
     local $/ = undef;
     my $content = <$fh>;
-    like( $content, qr/^not ok 1 - No tabs in '[^']*' on line 6/m, 'windows EOL found in tmp file 3' );
+    like( $content, qr/^not ok 1 - No windows line endings in '[^']*' on line \d+/m, 'windows EOL found in tmp file 3' );
     unlink $outfile;
     system("rm -rf $dir");
 }
@@ -68,7 +66,7 @@ sub make_bad_file_2 {
 =head1 NAME
 
 test.pL -	A test script
-
+
 =cut
 
 sub main {
@@ -90,7 +88,8 @@ sub new {
     my (\$class) = @_;
     my \$self = bless { }, \$class;
     return \$self;
-}
+}
+
 
 1;
 DUMMY
