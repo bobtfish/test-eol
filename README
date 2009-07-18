@@ -2,11 +2,11 @@ NAME
     Test::EOL - Check the correct line endings in your project
 
 SYNOPSIS
-    "Test::EOL" lets you check the presence of tabs in your perl code. It
-    report its results in standard "Test::Simple" fashion:
+    "Test::EOL" lets you check the presence of windows line endings in your
+    perl code. It report its results in standard "Test::Simple" fashion:
 
       use Test::EOL tests => 1;
-      eol_unix_ok( 'lib/Module.pm', 'Module is tab free');
+      eol_unix_ok( 'lib/Module.pm', 'Module is ^M free');
 
     Module authors can include the following in a t/eol.t and have
     "Test::EOL" automatically find and check all perl files in a module
@@ -22,7 +22,7 @@ SYNOPSIS
 
 DESCRIPTION
     This module scans your project/distribution for any perl files (scripts,
-    modules, etc) for the presence of tabs.
+    modules, etc) for the presence of windows line endings.
 
 EXPORT
     A list of functions that can be exported. You can delete this section if
