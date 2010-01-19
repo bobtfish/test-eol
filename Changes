@@ -1,4 +1,15 @@
-Revision history for Test-NoTabs
+Revision history for Test-EOL
+
+0.6  2010-01-19
+     - I'm so bad at this!  Fix another logic error that made all files fail
+       when using trailing_whitespace option (fREW)
+
+0.5  2010-01-19
+     - Fix logic fail that made all filenames the same if a user uses the
+       trailing_whitespace option (fREW)
+
+0.4  2010-01-19
+     - Add checks for trailing whitespace (fREW)
 
 0.3  2009-07-18
      - Fix File::Find regex which I had broken.

@@ -10,7 +10,7 @@ use File::Find;
 
 use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
-$VERSION = '0.3';
+$VERSION = '0.6';
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -64,13 +64,22 @@ sub _all_files {
 
 sub eol_unix_ok {
     my $file = shift;
-    my $test_txt = shift || "No windows line endings in '$file'";
+    my $test_txt;
+    $test_txt   = shift if !ref $_[0];
+    $test_txt ||= "No windows line endings in '$file'";
+    my $options = shift if ref $_[0] eq 'HASH';
+    $options ||= {
+        trailing_whitespace => 0,
+    };
     $file = _module_to_path($file);
     open my $fh, $file or do { $Test->ok(0, $test_txt); $Test->diag("Could not open $file: $!"); return; };
     my $line = 0;
     while (<$fh>) {
         $line++;
-        if ( /\r$/ ) {
+        if (
+           (!$options->{trailing_whitespace} && /\r$/) ||
+           ( $options->{trailing_whitespace} && /(\r|[ \t]+)$/)
+        ) {
           $Test->ok(0, $test_txt . " on line $line");
           return 0;
         }
@@ -78,12 +87,12 @@ sub eol_unix_ok {
     $Test->ok(1, $test_txt);
     return 1;
 }
-
 sub all_perl_files_ok {
+    my $options = shift if ref $_[0] eq 'HASH';
     my @files = _all_perl_files( @_ );
     _make_plan();
     foreach my $file ( @files ) {
-      eol_unix_ok($file);
+      eol_unix_ok($file, $options);
     }
 }
 
@@ -142,6 +151,11 @@ report its results in standard C<Test::Simple> fashion:
   use Test::EOL tests => 1;
   eol_unix_ok( 'lib/Module.pm', 'Module is ^M free');
 
+and to add checks for trailing whitespace:
+
+  use Test::EOL tests => 1;
+  eol_unix_ok( 'lib/Module.pm', 'Module is ^M and trailing whitespace free', { trailing_whitespace => 1 });
+
 Module authors can include the following in a t/eol.t and have C<Test::EOL>
 automatically find and check all perl files in a module distribution:
 
@@ -152,6 +166,16 @@ or
 
   use Test::EOL;
   all_perl_files_ok( @mydirs );
+
+and if authors would like to check for trailing whitespace:
+
+  use Test::EOL;
+  all_perl_files_ok({ trailing_whitespace => 1 });
+
+or
+
+  use Test::EOL;
+  all_perl_files_ok({ trailing_whitespace => 1 }, @mydirs );
 
 =head1 DESCRIPTION
 
@@ -165,7 +189,7 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
-=head2 all_perl_files_ok( [ @directories ] )
+=head2 all_perl_files_ok( [ \%options ], [ @directories ] )
 
 Applies C<eol_unix_ok()> to all perl files found in C<@directories> (and sub
 directories). If no <@directories> is given, the starting point is one level
@@ -180,7 +204,7 @@ If the test plan is defined:
 
 the total number of files tested must be specified.
 
-=head2 eol_unix_ok( $file [, $text] )
+=head2 eol_unix_ok( $file [, $text] [, \%options ]  )
 
 Run a unix EOL check on C<$file>. For a module, the path (lib/My/Module.pm) or the
 name (My::Module) can be both used.

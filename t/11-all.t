@@ -18,7 +18,10 @@ eol_unix_ok( $file2 );
 my $file3 = make_file3();
 eol_unix_ok( $file3 );
 
-unlink foreach ( $file1, $file2, $file3 );
+my $file4 = make_file3();
+eol_unix_ok( $file3, { trailing_whitespace => 1 });
+
+unlink foreach ( $file1, $file2, $file3, $file4 );
 
 sub make_file1 {
   my ($fh, $filename) = tempfile();
