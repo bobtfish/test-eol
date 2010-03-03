@@ -6,4 +6,4 @@ BEGIN {
     use_ok( 'Test::EOL' );
 }
 
-diag( "Testing Test::EOL $Test::NoTabs::VERSION, Perl $], $^X" );
+diag( "Testing Test::EOL $Test::EOL::VERSION, Perl $], $^X" );
