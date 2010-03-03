@@ -5,7 +5,7 @@ use Test::More qw(no_plan);
 use File::Temp qw( tempdir tempfile );
 
 my $perl  = $^X || 'perl';
-my $inc = join(' -I ', @INC) || '';
+my $inc = join(' -I ', map { qq{"$_"} } @INC) || '';
 $inc = "-I $inc" if $inc;
 
 {
