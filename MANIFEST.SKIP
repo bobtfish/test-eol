@@ -2,7 +2,7 @@ MANIFEST.bak
 MANIFEST.SKIP
 .git
 .gitignore
-Test-NoTabs-*
+Test-EOL-*
 Makefile.old
 .shipit
 ^Makefile$
