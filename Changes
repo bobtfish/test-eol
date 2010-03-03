@@ -1,5 +1,12 @@
 Revision history for Test-EOL
 
+0.7  2010-03-03
+    - Deal correctly with -I includes paths that include spaces in the
+      tests to stop them unexpectedly failing.
+    - Remove shelling out to the system rm command in the tests
+      to avoid nasty warnings on Win32.
+    - Remove warning from test diagnostics
+
 0.6  2010-01-19
      - I'm so bad at this!  Fix another logic error that made all files fail
        when using trailing_whitespace option (fREW)
