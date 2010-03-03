@@ -17,7 +17,6 @@ $inc = "-I $inc" if $inc;
     my $content = <$fh>;
     like( $content, qr/^not ok 1 - No windows line endings in '[^']*' on line 4/m, 'windows EOL found in tmp file 1' );
     unlink $outfile;
-    system("rm -rf $dir");
 }
 {
     my $dir = make_bad_file_2();
@@ -28,7 +27,6 @@ $inc = "-I $inc" if $inc;
     my $content = <$fh>;
     like( $content, qr/^not ok 1 - No windows line endings in '[^']*' on line \d+/m, 'windows EOL found in tmp file2 ' );
     unlink $outfile;
-    system("rm -rf $dir");
 }
 {
     my ($dir, $file) = make_bad_file_3();
@@ -39,7 +37,6 @@ $inc = "-I $inc" if $inc;
     my $content = <$fh>;
     like( $content, qr/^not ok 1 - No windows line endings in '[^']*' on line \d+/m, 'windows EOL found in tmp file 3' );
     unlink $outfile;
-    system("rm -rf $dir");
 }
 
 {
@@ -51,11 +48,10 @@ $inc = "-I $inc" if $inc;
     my $content = <$fh>;
     like( $content, qr/^not ok 1 - No windows line endings in '[^']*' on line \d+/m, 'windows EOL found in tmp file 4' );
     unlink $outfile;
-    system("rm -rf $dir");
 }
 
 sub make_bad_file_1 {
-  my $tmpdir = tempdir();
+  my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
   print $fh <<"DUMMY";
 #!perl
@@ -68,7 +64,7 @@ DUMMY
 }
 
 sub make_bad_file_2 {
-  my $tmpdir = tempdir();
+  my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
   print $fh <<"DUMMY";
 #!perl
@@ -89,7 +85,7 @@ DUMMY
 }
 
 sub make_bad_file_3 {
-  my $tmpdir = tempdir();
+  my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pm' );
   print $fh <<"DUMMY";
 use strict;
@@ -110,7 +106,7 @@ DUMMY
 }
 
 sub make_bad_file_4 {
-  my $tmpdir = tempdir();
+  my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
   print $fh <<"DUMMY";
 #!perl
