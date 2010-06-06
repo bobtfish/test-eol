@@ -1,4 +1,5 @@
 package Test::EOL;
+# ABSTRACT: Check the correct line endings in your project
 
 use strict;
 use warnings;
@@ -8,9 +9,7 @@ use File::Spec;
 use FindBin qw($Bin);
 use File::Find;
 
-use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
-
-$VERSION = '0.7';
+use vars qw( $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -178,11 +177,6 @@ sub _untaint {
 }
 
 1;
-__END__
-
-=head1 NAME
-
-Test::EOL - Check the correct line endings in your project
 
 =head1 SYNOPSIS
 
@@ -229,9 +223,7 @@ modules, etc) for the presence of windows line endings.
 A list of functions that can be exported.  You can delete this section
 if you don't export anything, such as for a purely object-oriented module.
 
-=head1 FUNCTIONS
-
-=head2 all_perl_files_ok( [ \%options ], [ @directories ] )
+=func all_perl_files_ok( [ \%options ], [ @directories ] )
 
 Applies C<eol_unix_ok()> to all perl files found in C<@directories> (and sub
 directories). If no <@directories> is given, the starting point is one level
@@ -246,27 +238,10 @@ If the test plan is defined:
 
 the total number of files tested must be specified.
 
-=head2 eol_unix_ok( $file [, $text] [, \%options ]  )
+=func eol_unix_ok( $file [, $text] [, \%options ]  )
 
 Run a unix EOL check on C<$file>. For a module, the path (lib/My/Module.pm) or the
 name (My::Module) can be both used.
-
-=head1 AUTHOR
-
-Tomas Doran (t0m) C<< <bobtfish@bobtfish.net> >>
-
-=head1 BUGS
-
-Testing for EOL styles other than unix (\n) currently unsupported.
-
-The source code can be found on github, as listed in C< META.yml >,
-patches are welcome.
-
-Otherwise please report any bugs or feature requests to
-C<bug-test-eol at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-EOL>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
 
 =head1 ACKNOWLEDGEMENTS
 
@@ -277,12 +252,4 @@ Shamelessly ripped off from L<Test::NoTabs>.
 L<Test::More>, L<Test::Pod>. L<Test::Distribution>, L<Test:NoWarnings>,
 L<Test::NoTabs>, L<Module::Install::AuthorTests>.
 
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009 Tomas Doran, some rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
 =cut
-
