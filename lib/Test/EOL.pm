@@ -62,6 +62,29 @@ sub _all_files {
     return @found;
 }
 
+# Formats various human invisible symbols
+# to similar visible ones.
+# Perhaps ^M or something like that 
+# would be more appropriate?
+
+sub _show_whitespace { 
+    my $string = shift;
+    $string =~ s/\r/[\\r]/g;
+    $string =~ s/\t/[\\t]/g;
+    $string =~ s/ /[\\s]/g;
+    return $string;
+}
+
+# Format a line record for diagnostics.
+
+sub _debug_line { 
+    my ( $options, $line ) = @_;
+    $line->[2] =~ s/\n\z//g;
+    return "line $line->[1] : $line->[0] " . ( 
+      $options->{show_lines} ? qq{: } . _show_whitespace( $line->[2] )  : q{} 
+    );
+}
+
 sub eol_unix_ok {
     my $file = shift;
     my $test_txt;
@@ -70,19 +93,38 @@ sub eol_unix_ok {
     my $options = shift if ref $_[0] eq 'HASH';
     $options ||= {
         trailing_whitespace => 0,
+        all_reasons => 0,
     };
     $file = _module_to_path($file);
+    
     open my $fh, $file or do { $Test->ok(0, $test_txt); $Test->diag("Could not open $file: $!"); return; };
+    # Windows-- , default is :crlf, which hides \r\n  -_-
+    binmode( $fh, ':raw:utf8' );
     my $line = 0;
+    my @fails;
     while (<$fh>) {
         $line++;
-        if (
-           (!$options->{trailing_whitespace} && /\r$/) ||
-           ( $options->{trailing_whitespace} && /(\r|[ \t]+)$/)
-        ) {
-          $Test->ok(0, $test_txt . " on line $line");
-          return 0;
+        if ( !$options->{trailing_whitespace} && /(\r+)$/ ) {
+          my $match = $1;
+          push @fails, [ _show_whitespace( $match ) , $line , $_ ];
         }
+        if (  $options->{trailing_whitespace} && /([ \t]*\r+|[ \t]+)$/ ) {
+          my $match = $1;
+          push @fails, [ _show_whitespace($match), $line , $_ ];
+        }
+        # Minor short-circuit for people who don't need the whole file scanned
+        # once there's an err.
+        last if( @fails > 0 && !$options->{all_reasons} );
+    }
+    if( @fails ){ 
+       $Test->ok( 0, $test_txt . " on "  . _debug_line({ show_lines => 0 } , $fails[0]  )  );
+       if ( $options->{all_reasons} || 1 ){
+          $Test->diag( "  Problem Lines: ");
+          for ( @fails ){ 
+            $Test->diag(_debug_line({ show_lines => 1 } , $_ ) );
+          }
+       }
+       return 0;
     }
     $Test->ok(1, $test_txt);
     return 1;

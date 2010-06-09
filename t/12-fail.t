@@ -3,11 +3,19 @@ use strict;
 use Test::More qw(no_plan);
 
 use File::Temp qw( tempdir tempfile );
-
 my $perl  = $^X || 'perl';
 my $inc = join(' -I ', map { qq{"$_"} } @INC) || '';
 $inc = "-I $inc" if $inc;
 
+{
+    my ( $dir, $filename ) = make_raw_badfile();
+    local $/ = undef;
+    open my $fh, '<', $filename or die $!;
+    binmode( $fh, ':raw' );
+    my $content = <$fh>;
+    is( $content, ascii_string(), 'Data written to file is there when we look for it later' ); 
+
+}
 {
     my $dir = make_bad_file_1();
     my (undef, $outfile) = tempfile();
@@ -50,22 +58,41 @@ $inc = "-I $inc" if $inc;
     unlink $outfile;
 }
 
+sub ascii_string { 
+  my $o = "<before \r\n between \r\n after \n normal >";
+  return $o x 3;
+}
+
+sub make_raw_badfile { 
+  my $tmpdir = tempdir( CLEANUP => 1 ); 
+  my ( $fh, $filename ) = tempfile( DIR => $tmpdir, SUFFIX =>  '.tXt' ); 
+  binmode $fh, ':raw:utf8';
+  print $fh ascii_string();
+  close $fh;
+  return ( $tmpdir, $filename );
+}
+
+
 sub make_bad_file_1 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
-  print $fh <<"DUMMY";
+  binmode $fh, ':raw:utf8';
+  my $str = <<"DUMMY";
 #!perl
 
 sub main {
     print "Hello!\r\n";
 }
 DUMMY
+  print $fh $str;
+
   return $tmpdir;
 }
 
 sub make_bad_file_2 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
+  binmode $fh, ':raw:utf8';
   print $fh <<"DUMMY";
 #!perl
 
@@ -87,6 +114,7 @@ DUMMY
 sub make_bad_file_3 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pm' );
+  binmode $fh, ':raw:utf8';
   print $fh <<"DUMMY";
 use strict;
 
@@ -108,6 +136,7 @@ DUMMY
 sub make_bad_file_4 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
+  binmode $fh, ':raw:utf8';
   print $fh <<"DUMMY";
 #!perl
 

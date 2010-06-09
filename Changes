@@ -1,5 +1,12 @@
 Revision history for Test-EOL
 
+    ( Kent Fredric )
+    - Use binmode :raw for input/output. Solves win32 translating
+      the \r\n character into \n's silently during input. 
+    - Add an ( currently undocumeted ) all_reasons option to show every line
+      that is broken.
+    - Add visualising of invisible characters that match the regex.
+
 0.7  2010-03-03
     - Deal correctly with -I includes paths that include spaces in the
       tests to stop them unexpectedly failing.
