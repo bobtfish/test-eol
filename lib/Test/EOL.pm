@@ -63,10 +63,10 @@ sub _all_files {
 
 # Formats various human invisible symbols
 # to similar visible ones.
-# Perhaps ^M or something like that 
+# Perhaps ^M or something like that
 # would be more appropriate?
 
-sub _show_whitespace { 
+sub _show_whitespace {
     my $string = shift;
     $string =~ s/\r/[\\r]/g;
     $string =~ s/\t/[\\t]/g;
@@ -76,11 +76,11 @@ sub _show_whitespace {
 
 # Format a line record for diagnostics.
 
-sub _debug_line { 
+sub _debug_line {
     my ( $options, $line ) = @_;
     $line->[2] =~ s/\n\z//g;
-    return "line $line->[1] : $line->[0] " . ( 
-      $options->{show_lines} ? qq{: } . _show_whitespace( $line->[2] )  : q{} 
+    return "line $line->[1] : $line->[0] " . (
+      $options->{show_lines} ? qq{: } . _show_whitespace( $line->[2] )  : q{}
     );
 }
 
@@ -95,7 +95,7 @@ sub eol_unix_ok {
         all_reasons => 0,
     };
     $file = _module_to_path($file);
-    
+
     open my $fh, $file or do { $Test->ok(0, $test_txt); $Test->diag("Could not open $file: $!"); return; };
     # Windows-- , default is :crlf, which hides \r\n  -_-
     binmode( $fh, ':raw:utf8' );
@@ -115,11 +115,11 @@ sub eol_unix_ok {
         # once there's an err.
         last if( @fails > 0 && !$options->{all_reasons} );
     }
-    if( @fails ){ 
+    if( @fails ){
        $Test->ok( 0, $test_txt . " on "  . _debug_line({ show_lines => 0 } , $fails[0]  )  );
        if ( $options->{all_reasons} || 1 ){
           $Test->diag( "  Problem Lines: ");
-          for ( @fails ){ 
+          for ( @fails ){
             $Test->diag(_debug_line({ show_lines => 1 } , $_ ) );
           }
        }
