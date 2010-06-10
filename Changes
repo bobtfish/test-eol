@@ -1,5 +1,6 @@
 Revision history for Test-EOL
 
+0.8  2010-06-11
     - Use binmode :raw for input/output. Solves win32 translating the
       \r\n character into \n's silently during input (Kent Fredric).
     - Add an ( currently undocumeted ) all_reasons option to show
