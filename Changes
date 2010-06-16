@@ -1,5 +1,9 @@
 Revision history for Test-EOL
 
+0.9  2010-06-16
+     - Fix warnings on very old perls (paul@city-fan.org)
+       (Closes: RT#58442)
+
 0.8  2010-06-11
     - Use binmode :raw for input/output. Solves win32 translating the
       \r\n character into \n's silently during input (Kent Fredric).
