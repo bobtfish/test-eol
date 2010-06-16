@@ -145,7 +145,7 @@ sub _is_perl_script {
     my $file = shift;
     return 1 if $file =~ /\.pl$/i;
     return 1 if $file =~ /\.t$/;
-    open my $fh, $file or return;
+    open (my $fh, $file) or return;
     my $first = <$fh>;
     return 1 if defined $first && ($first =~ $PERL_PATTERN);
     return;
