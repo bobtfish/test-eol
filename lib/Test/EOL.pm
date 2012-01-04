@@ -98,7 +98,7 @@ sub eol_unix_ok {
 
     open my $fh, $file or do { $Test->ok(0, $test_txt); $Test->diag("Could not open $file: $!"); return; };
     # Windows-- , default is :crlf, which hides \r\n  -_-
-    binmode( $fh, ':raw:utf8' );
+    binmode( $fh, ':raw' );
     my $line = 0;
     my @fails;
     while (<$fh>) {
