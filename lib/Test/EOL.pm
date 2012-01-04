@@ -79,7 +79,7 @@ sub _show_whitespace {
 sub _debug_line {
     my ( $options, $line ) = @_;
     $line->[2] =~ s/\n\z//g;
-    return "line $line->[1] : $line->[0] " . (
+    return "line $line->[1]: $line->[0] " . (
       $options->{show_lines} ? qq{: } . _show_whitespace( $line->[2] )  : q{}
     );
 }
@@ -88,7 +88,7 @@ sub eol_unix_ok {
     my $file = shift;
     my $test_txt;
     $test_txt   = shift if !ref $_[0];
-    $test_txt ||= "No windows line endings in '$file'";
+    $test_txt ||= "No incorrect line endings in '$file'";
     my $options = shift if ref $_[0] eq 'HASH';
     $options ||= {
         trailing_whitespace => 0,
