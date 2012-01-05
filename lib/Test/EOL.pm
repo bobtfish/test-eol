@@ -180,9 +180,9 @@ sub _untaint {
 
 =head1 SYNOPSIS
 
-C<Test::EOL> lets you check the presence of windows line endings in your
-perl code. It
-report its results in standard C<Test::Simple> fashion:
+C<Test::EOL> lets you check for the presence of trailing whitespace and/or
+windows line endings in your perl code. It reports its results in standard
+C<Test::Simple> fashion:
 
   use Test::EOL tests => 1;
   eol_unix_ok( 'lib/Module.pm', 'Module is ^M free');
@@ -223,13 +223,33 @@ modules, etc) for the presence of windows line endings.
 A list of functions that can be exported.  You can delete this section
 if you don't export anything, such as for a purely object-oriented module.
 
-=func all_perl_files_ok( [ \%options ], [ @directories ] )
+=func all_perl_files_ok
+
+  all_perl_files_ok( [ \%options ], [ @directories ] )
 
 Applies C<eol_unix_ok()> to all perl files found in C<@directories> (and sub
 directories). If no <@directories> is given, the starting point is one level
 above the current running script, that should cover all the files of a typical
 CPAN distribution. A perl file is *.pl or *.pm or *.t or a file starting
 with C<#!...perl>
+
+Valid C<\%options> currently are:
+
+=over
+
+=item * trailing_whitespace
+
+By default Test::EOL only looks for Windows (CR/LF) line-endings. Set this
+to true to raise errors if any kind of trailing whitespace is present in
+the file.
+
+=item * all_reasons
+
+Normally Test::EOL reports only the first error in every file (given that
+a text file originated on Windows will fail every single line). Set this
+a true value to register a test failure for every line with an error.
+
+=back
 
 If the test plan is defined:
 
@@ -238,10 +258,14 @@ If the test plan is defined:
 
 the total number of files tested must be specified.
 
-=func eol_unix_ok( $file [, $text] [, \%options ]  )
+=func eol_unix_ok
+
+  eol_unix_ok ( $file [, $text] [, \%options ] )
 
 Run a unix EOL check on C<$file>. For a module, the path (lib/My/Module.pm) or the
-name (My::Module) can be both used.
+name (My::Module) can be both used. C<$text> is the diagnostic label emited after
+the C<ok>/C<not ok> TAP output. C<\%options> takes the same values as described in
+L</all_perl_files_ok>.
 
 =head1 ACKNOWLEDGEMENTS
 
