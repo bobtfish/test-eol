@@ -1,5 +1,6 @@
 Revision history for Test-EOL
 
+1.0  2012-01-05
     - Fix misleading test failure diagnostics when only issue are
       trailing whitespaces
     - No longer blindly assume utf8 on input files (RT#59877)
