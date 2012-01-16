@@ -1,5 +1,7 @@
 Revision history for Test-EOL
 
+    - Fix test fails on < 5.8 perls
+
 1.0  2012-01-05
     - Fix misleading test failure diagnostics when only issue are
       trailing whitespaces

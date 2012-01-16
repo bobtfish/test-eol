@@ -66,7 +66,7 @@ sub ascii_string {
 sub make_raw_badfile { 
   my $tmpdir = tempdir( CLEANUP => 1 ); 
   my ( $fh, $filename ) = tempfile( DIR => $tmpdir, SUFFIX =>  '.tXt' ); 
-  binmode $fh, ':raw:utf8';
+  binmode $fh, ':raw';
   print $fh ascii_string();
   close $fh;
   return ( $tmpdir, $filename );
@@ -76,7 +76,7 @@ sub make_raw_badfile {
 sub make_bad_file_1 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
-  binmode $fh, ':raw:utf8';
+  binmode $fh, ':raw';
   my $str = <<"DUMMY";
 #!perl
 
@@ -92,7 +92,7 @@ DUMMY
 sub make_bad_file_2 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
-  binmode $fh, ':raw:utf8';
+  binmode $fh, ':raw';
   print $fh <<"DUMMY";
 #!perl
 
@@ -114,7 +114,7 @@ DUMMY
 sub make_bad_file_3 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pm' );
-  binmode $fh, ':raw:utf8';
+  binmode $fh, ':raw';
   print $fh <<"DUMMY";
 use strict;
 
@@ -136,7 +136,7 @@ DUMMY
 sub make_bad_file_4 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
-  binmode $fh, ':raw:utf8';
+  binmode $fh, ':raw';
   print $fh <<"DUMMY";
 #!perl
 
