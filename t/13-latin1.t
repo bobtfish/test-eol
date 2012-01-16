@@ -13,18 +13,18 @@ $ENV{PERL5LIB} = join ($Config{path_sep}, @INC);
   print $fh "\xE1\xF3 how na\xEFve";
   close $fh;
 
-  my (undef, $outfile) = tempfile();
+  my (undef, $stderr) = tempfile();
 
-  `$^X -MTest::EOL -e "all_perl_files_ok( '$tmpdir' )" >$outfile 2>&1`;
+  `$^X -MTest::EOL -e "all_perl_files_ok( '$tmpdir' )" 2>$stderr`;
   ok(! $? );
 
-  my $out = do { local (@ARGV, $/) = $outfile; <> };
+  my $out = do { local (@ARGV, $/) = $stderr; <> };
 
   is (
     $out,
-    "ok 1 - No incorrect line endings in '$filename'\n1..1\n",
-    'no malformed unicode warnings',
+    '',
+    'no malformed unicode warnings on STDERR',
   );
 
-  unlink $outfile;
+  unlink $stderr;
 }
