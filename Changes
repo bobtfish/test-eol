@@ -1,5 +1,8 @@
 Revision history for Test-EOL
 
+   - Fix bad regex matching directories containing 'svn', not just .svn'
+     directories. RT#75968
+
 1.1  2012-01-16
     - Fix test fails on < 5.8 perls
     - Fix t/13-latin1.t failures on Win32 and under TB1.5
