@@ -1,5 +1,6 @@
 Revision history for Test-EOL
 
+1.2
    - Fix bad regex matching directories containing 'svn', not just .svn'
      directories. RT#75968
 
