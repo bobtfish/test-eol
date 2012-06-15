@@ -1,5 +1,7 @@
 Revision history for Test-EOL
 
+   - Fix to ignore inc/ directory used by Module::Install.
+
 1.2
    - Fix bad regex matching directories containing 'svn', not just .svn'
      directories. RT#75968
