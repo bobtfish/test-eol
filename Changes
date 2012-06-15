@@ -1,5 +1,6 @@
 Revision history for Test-EOL
 
+1.3 2012-06-15
    - Fix to ignore inc/ directory used by Module::Install.
 
 1.2
