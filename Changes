@@ -1,5 +1,7 @@
 Revision history for Test-EOL
 
+  - Properly fix Win32. RT#76037
+
 1.3 2012-06-15
    - Fix to ignore inc/ directory used by Module::Install.
 
