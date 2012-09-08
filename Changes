@@ -1,5 +1,6 @@
 Revision history for Test-EOL
 
+1.5 2012-09-08
   - Change to default to searching for trailing whitespace from the
     current directory downwards (as tests are run from the top of a dist
     normally), rather than one directory above the test file, as then
