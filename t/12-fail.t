@@ -18,43 +18,41 @@ $inc = "-I $inc" if $inc;
 }
 {
     my $dir = make_bad_file_1();
-    my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$dir' )" > $outfile 2>&1` );
-    local $/ = undef;
-    open my $fh, '<', $outfile or die $!;
-    my $content = <$fh>;
-    like( $content, qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 4: [\r]/m, 'windows EOL found in tmp file 1' );
-    unlink $outfile;
+    run_ok( "all_perl_files_ok( '$dir' )",
+            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 4: [\r]/m,
+            'windows EOL found in tmp file 1' );
 }
 {
     my $dir = make_bad_file_2();
-    my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$dir' )" > $outfile 2>&1` );
-    open my $fh, '<', $outfile or die $!;
-    local $/ = undef;
-    my $content = <$fh>;
-    like( $content, qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 8: [\r][\r][\r][\r][\r][\r][\r]/m, 'windows EOL found in tmp file2 ' );
-    unlink $outfile;
+    run_ok( "all_perl_files_ok( '$dir' )",
+            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 8: [\r][\r][\r][\r][\r][\r][\r]/m,
+            'windows EOL found in tmp file2 ' );
 }
 {
     my ($dir, $file) = make_bad_file_3();
-    my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$file' )" > $outfile 2>&1` );
-    open my $fh, '<', $outfile or die $!;
-    local $/ = undef;
-    my $content = <$fh>;
-    like( $content, qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 9: [\r][\r][\r]/m, 'windows EOL found in tmp file 3' );
-    unlink $outfile;
+    run_ok( "all_perl_files_ok( '$file' )",
+            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 9: [\r][\r][\r]/m,
+            'windows EOL found in tmp file 3' );
 }
 
 {
     my $dir = make_bad_file_4();
+    run_ok( "all_perl_files_ok({trailing_whitespace => 1}, '$dir' )",
+            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 13: [\s][\t][\s][\s]/m,
+            'Trailing ws EOL found in tmp file 4' );
+}
+
+sub run_ok {
+    my ($code, $match, $test_name) = @_;
+    my $line = (caller)[2];
+    die "code containing double quotes is not portable on Win32 in one-liners" if $code =~ /"/;
     my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok({trailing_whitespace => 1}, '$dir' )" > $outfile 2>&1` );
-    open my $fh, '<', $outfile or die $!;
+    is( `$perl $inc -MTest::EOL -e "$code" > $outfile 2>&1`, '', "test sub program at line $line: output redirected" );
+    is( $? >> 8, 1, "test sub program at line $line: exit code is 1" );
     local $/ = undef;
+    open my $fh, '<', $outfile or die $!;
     my $content = <$fh>;
-    like( $content, qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 13: [\s][\t][\s][\s]/m, 'Trailing ws EOL found in tmp file 4' );
+    like( $content, $match, $test_name );
     unlink $outfile;
 }
 
