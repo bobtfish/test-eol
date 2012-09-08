@@ -13,7 +13,7 @@ $inc = "-I $inc" if $inc;
     open my $fh, '<', $filename or die $!;
     binmode( $fh, ':raw' );
     my $content = <$fh>;
-    is( $content, ascii_string(), 'Data written to file is there when we look for it later' ); 
+    is( $content, ascii_string(), 'Data written to file is there when we look for it later' );
 
 }
 {
@@ -57,14 +57,14 @@ sub run_ok {
     unlink $outfile;
 }
 
-sub ascii_string { 
+sub ascii_string {
   my $o = "<before \r\n between \r\n after \n normal >";
   return $o x 3;
 }
 
-sub make_raw_badfile { 
-  my $tmpdir = tempdir( CLEANUP => 1 ); 
-  my ( $fh, $filename ) = tempfile( DIR => $tmpdir, SUFFIX =>  '.tXt' ); 
+sub make_raw_badfile {
+  my $tmpdir = tempdir( CLEANUP => 1 );
+  my ( $fh, $filename ) = tempfile( DIR => $tmpdir, SUFFIX =>  '.tXt' );
   binmode $fh, ':raw';
   print $fh ascii_string();
   close $fh;
