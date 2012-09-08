@@ -19,7 +19,7 @@ $inc = "-I $inc" if $inc;
 {
     my $dir = make_bad_file_1();
     my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$dir' )" 2>&1 > $outfile` );
+    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$dir' )" > $outfile 2>&1` );
     local $/ = undef;
     open my $fh, '<', $outfile or die $!;
     my $content = <$fh>;
@@ -29,7 +29,7 @@ $inc = "-I $inc" if $inc;
 {
     my $dir = make_bad_file_2();
     my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$dir' )" 2>&1 > $outfile` );
+    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$dir' )" > $outfile 2>&1` );
     open my $fh, '<', $outfile or die $!;
     local $/ = undef;
     my $content = <$fh>;
@@ -39,7 +39,7 @@ $inc = "-I $inc" if $inc;
 {
     my ($dir, $file) = make_bad_file_3();
     my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$file' )" 2>&1 > $outfile` );
+    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok( '$file' )" > $outfile 2>&1` );
     open my $fh, '<', $outfile or die $!;
     local $/ = undef;
     my $content = <$fh>;
@@ -50,7 +50,7 @@ $inc = "-I $inc" if $inc;
 {
     my $dir = make_bad_file_4();
     my (undef, $outfile) = tempfile();
-    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok({trailing_whitespace => 1}, '$dir' )" 2>&1 > $outfile` );
+    ok( `$perl $inc -MTest::EOL -e "all_perl_files_ok({trailing_whitespace => 1}, '$dir' )" > $outfile 2>&1` );
     open my $fh, '<', $outfile or die $!;
     local $/ = undef;
     my $content = <$fh>;
