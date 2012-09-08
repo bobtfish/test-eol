@@ -1,5 +1,10 @@
 Revision history for Test-EOL
 
+  - Change to default to searching for trailing whitespace from the
+    current directory downwards (as tests are run from the top of a dist
+    normally), rather than one directory above the test file, as then
+    we don't work as expected if tests are in t/author or similar.
+
 1.4 2012-09-08
   - Properly fix Win32. RT#76037
 
