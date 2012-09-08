@@ -19,7 +19,7 @@ $inc = "-I $inc" if $inc;
 {
     my $dir = make_bad_file_1();
     run_ok( "all_perl_files_ok( '$dir' )",
-            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 4: [\r]/m,
+            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 5: [\r]/m,
             'windows EOL found in tmp file 1' );
 }
 {
@@ -38,7 +38,8 @@ $inc = "-I $inc" if $inc;
 {
     my $dir = make_bad_file_4();
     run_ok( "all_perl_files_ok({trailing_whitespace => 1}, '$dir' )",
-            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 13: [\s][\t][\s][\s]/m,
+            # Note that line number will be 13
+            qr/^not ok 1 - No incorrect line endings in '[^']*' \Qon line 12: [\s][\t][\s][\s]/m,
             'Trailing ws EOL found in tmp file 4' );
 }
 
@@ -79,6 +80,7 @@ sub make_bad_file_1 {
 #!perl
 
 sub main {
+    # Note that the generated file will have the CRLF expanded in the source
     print "Hello!\r\n";
 }
 DUMMY
@@ -99,11 +101,11 @@ sub make_bad_file_2 {
 =head1 NAME
 
 test.pL -	A test script
-
+\r\r\r\r\r\r\r\r
 =cut
 
 sub main {
-    print "Hello!\n";
+    print "Hello!\\n";
 }
 DUMMY
   return $tmpdir;
@@ -114,18 +116,18 @@ sub make_bad_file_3 {
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pm' );
   binmode $fh, ':raw';
   print $fh <<"DUMMY";
-use strict;
+use strict;\r
+\r
+package My::Test;\r
+\r
+sub new {\r
+    my (\$class) = \@_;\r
+    my \$self = bless { }, \$class;\r
+    return \$self;\r
+}\r\r\r\r
 
-package My::Test;
-
-sub new {
-    my (\$class) = @_;
-    my \$self = bless { }, \$class;
-    return \$self;
-}
-
-
-1;
+\r
+1;\r
 DUMMY
   close $fh;
   return ($tmpdir, $filename);
@@ -135,7 +137,7 @@ sub make_bad_file_4 {
   my $tmpdir = tempdir( CLEANUP => 1 );
   my ($fh, $filename) = tempfile( DIR => $tmpdir, SUFFIX => '.pL' );
   binmode $fh, ':raw';
-  print $fh <<"DUMMY";
+  print $fh <<'DUMMY';
 #!perl
 
 =pod
@@ -149,7 +151,7 @@ test.pL -	A test script
 sub main {
 DUMMY
 
-print $fh qq{    print "Hello!\n"; \t  \n}; # <-- whitespace
+print $fh qq{    print "Hello!\\n"; \t  \n}; # <-- whitespace
 print $fh '}';
 
   return $tmpdir;
