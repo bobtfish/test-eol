@@ -6,8 +6,8 @@ use warnings;
 
 use Test::Builder;
 use File::Spec;
-use FindBin qw($Bin);
 use File::Find;
+use Cwd qw/ cwd /;
 
 use vars qw( $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
@@ -42,7 +42,8 @@ sub _all_perl_files {
 }
 
 sub _all_files {
-    my @base_dirs = @_ ? @_ : File::Spec->catdir($Bin, $updir);
+    my @base_dirs = @_ ? @_ : cwd();
+    my $options = pop(@base_dirs) if ref $base_dirs[-1] eq 'HASH';
     my @found;
     my $want_sub = sub {
         return if ($File::Find::dir =~ m![\\/]?CVS[\\/]|[\\/]?\.svn[\\/]!); # Filter out cvs or subversion dirs/

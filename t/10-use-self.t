@@ -1,3 +1,6 @@
 # Check that our own source is clean
 use Test::EOL;
-all_perl_files_ok({ trailing_whitespace => 1 });
+use Cwd;
+use File::Spec;
+all_perl_files_ok(File::Spec->catdir(cwd(), 'lib'), { trailing_whitespace => 1 });
+
