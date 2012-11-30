@@ -275,7 +275,7 @@ Shamelessly ripped off from L<Test::NoTabs>.
 
 =head1 SEE ALSO
 
-L<Test::More>, L<Test::Pod>. L<Test::Distribution>, L<Test:NoWarnings>,
+L<Test::More>, L<Test::Pod>. L<Test::Distribution>, L<Test::NoWarnings>,
 L<Test::NoTabs>, L<Module::Install::AuthorTests>.
 
 =cut
